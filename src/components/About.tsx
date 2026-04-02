@@ -3,11 +3,19 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-const highlights = [
-  { label: "Focus", value: "Data Science & ML" },
-  { label: "University", value: "Indiana University" },
-  { label: "Graduation", value: "May 2026" },
-  { label: "Location", value: "Bloomington, IN" },
+const notes = [
+  {
+    label: "Build style",
+    value: "Practical systems over portfolio demos",
+  },
+  {
+    label: "Interests",
+    value: "ML engineering, data infra, product-minded app work",
+  },
+  {
+    label: "Outside the editor",
+    value: "Basketball, lifting, and side projects that accidentally get serious",
+  },
 ];
 
 export default function About() {
@@ -15,71 +23,54 @@ export default function About() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="about" className="relative py-32 px-6">
-      <div ref={ref} className="max-w-4xl mx-auto">
+    <section id="about" className="px-4 py-8 sm:px-6 lg:px-8">
+      <div ref={ref} className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.55 }}
+          className="section-frame h-fit px-5 py-5 lg:sticky lg:top-28"
         >
-          <p className="text-sm tracking-[0.3em] uppercase text-indigo-400 font-mono mb-3">
-            About
-          </p>
-          <h2 className="text-4xl sm:text-5xl font-bold mb-8">
-            A bit about <span className="gradient-text">me</span>
+          <p className="eyebrow">About</p>
+          <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+            How I work
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-5 gap-12">
-          {/* Bio text */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="md:col-span-3 space-y-5 text-zinc-400 leading-relaxed"
-          >
-            <p>
-              I&apos;m a Computer Science senior at Indiana University, mostly
-              focused on data science and machine learning. I like building
-              things that work with real data and actually do something useful.
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55, delay: 0.1 }}
+          className="section-frame grid gap-6 p-6 sm:p-8 lg:grid-cols-[minmax(0,1.15fr)_280px]"
+        >
+          <div className="space-y-5 text-base leading-8 text-[var(--foreground)]">
+            <p className="text-balance text-xl leading-8 text-[var(--foreground)]">
+              I am a Computer Science senior at Indiana University with a bias toward things that run every day, not just things that look good in screenshots.
             </p>
-            <p>
-              Right now I&apos;m running an NBA prediction pipeline off a
-              Raspberry Pi and building a fitness app in Swift. I care a lot
-              about clean data pipelines, reproducible results, and getting
-              things into people&apos;s hands.
+            <p className="text-[var(--muted)]">
+              That is why a lot of my work starts with messy data, automation, and evaluation discipline. I like projects where the hard part is not just training a model, but making the whole system reliable enough to trust.
             </p>
-            <p>
-              Outside of coding I&apos;m usually watching basketball, in the
-              gym, or messing around with a new side project. I&apos;m looking
-              for roles in ML, data engineering, or software development after
-              graduation.
+            <p className="text-[var(--muted)]">
+              Lately that means an NBA prediction pipeline, a Swift fitness app, and a lot of thought about what makes software useful instead of merely interesting.
             </p>
-          </motion.div>
+          </div>
 
-          {/* Quick facts */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="md:col-span-2 space-y-4"
-          >
-            {highlights.map((item, i) => (
-              <motion.div
-                key={item.label}
-                initial={{ opacity: 0, x: 20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.5 + i * 0.1 }}
-                className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]"
-              >
-                <p className="text-xs tracking-wider uppercase text-zinc-600 mb-1">
-                  {item.label}
-                </p>
-                <p className="text-white font-medium">{item.value}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
+          <div className="border-t border-[var(--line)] pt-5 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+            <p className="eyebrow mb-4">Operating notes</p>
+            <div className="space-y-4">
+              {notes.map((item) => (
+                <div key={item.label} className="border border-[var(--line)] bg-[rgba(255,251,246,0.72)] p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                    {item.label}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-[var(--foreground)]">
+                    {item.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

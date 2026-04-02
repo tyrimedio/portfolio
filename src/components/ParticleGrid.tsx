@@ -27,7 +27,7 @@ export default function ParticleGrid() {
     if (!ctx) return;
 
     let animationId: number;
-    let mouse = { x: -1000, y: -1000 };
+    const mouse = { x: -1000, y: -1000 };
     let particles: Particle[] = [];
     let cols = 0;
     let rows = 0;
