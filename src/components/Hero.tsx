@@ -1,126 +1,129 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
 
-const currentBoard = [
-  { label: "Backtested games", value: "1,059", detail: "Leakage-aware NBA pipeline" },
-  { label: "Deploy target", value: "Raspberry Pi", detail: "Automated daily jobs + reporting" },
-  { label: "In progress", value: "Momentum", detail: "SwiftUI fitness product" },
-];
-
-const focusAreas = [
-  "Machine learning systems that survive contact with real data",
-  "Mobile products with clear feedback loops and useful defaults",
-  "Evaluation workflows that care about baselines, drift, and stakes",
+const titles = [
+  "Data Scientist",
+  "ML Engineer",
+  "Software Developer",
+  "iOS Developer",
 ];
 
 export default function Hero() {
+  const [titleIndex, setTitleIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTitleIndex((prev) => (prev + 1) % titles.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section id="home" className="px-4 pb-18 pt-32 sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,420px)] lg:items-end">
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
+    <section
+      id="home"
+      className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center"
+    >
+      {/* Radial glow behind name */}
+      <div className="absolute w-[600px] h-[600px] rounded-full bg-indigo-500/10 blur-[120px] pointer-events-none" />
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="relative z-10"
+      >
+        {/* Greeting line */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="section-frame accent-wash relative overflow-hidden px-6 py-8 sm:px-8 sm:py-10"
+          transition={{ delay: 0.2 }}
+          className="text-sm tracking-[0.3em] uppercase text-indigo-400 font-mono mb-6"
         >
-          <div className="mb-8 flex flex-wrap items-center gap-3 text-[var(--muted)]">
-            <span className="eyebrow">Bloomington, IN</span>
-            <span className="h-1 w-1 rounded-full bg-[var(--foreground)]/30" />
-            <span className="eyebrow">Graduating May 2026</span>
-          </div>
+          Hey, I&apos;m
+        </motion.p>
 
-          <p className="eyebrow mb-4">Personal portfolio / operating board</p>
-          <h1 className="display-title text-[3.8rem] text-[var(--foreground)] sm:text-[5.4rem] lg:text-[7.2rem]">
-            Ty
-            <br />
-            Rimedio
-          </h1>
+        {/* Name */}
+        <h1 className="text-6xl sm:text-8xl font-bold tracking-tight mb-4">
+          <span className="gradient-text">Ty Rimedio</span>
+        </h1>
 
-          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_220px]">
-            <div>
-              <p className="max-w-2xl text-balance text-lg leading-8 text-[var(--foreground)] sm:text-xl">
-                I build sports analytics tools, ML pipelines, and product-minded apps that feel rigorous without feeling academic.
-              </p>
-              <p className="mt-5 max-w-xl text-base leading-7 text-[var(--muted)]">
-                The work I care about lives in the middle of modeling, engineering, and shipping. I want the portfolio to read like that too.
-              </p>
-            </div>
-
-            <div className="border-l border-[var(--line)] pl-5">
-              <p className="eyebrow mb-3">Right now</p>
-              <p className="text-sm leading-6 text-[var(--muted)]">
-                Running a prediction system on a Pi, building a Swift fitness app,
-                and looking for ML, data, or software roles where clean execution matters.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-10 flex flex-wrap gap-3">
-            <a
-              href="#projects"
-              className="border border-[var(--foreground)] bg-[var(--foreground)] px-5 py-3 text-sm font-medium text-[var(--background)] transition-colors hover:bg-[var(--accent)] hover:border-[var(--accent)]"
+        {/* Rotating title */}
+        <div className="h-12 sm:h-14 flex items-center justify-center overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={titleIndex}
+              initial={{ y: 30, opacity: 0, filter: "blur(8px)" }}
+              animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+              exit={{ y: -30, opacity: 0, filter: "blur(8px)" }}
+              transition={{ duration: 0.4 }}
+              className="text-xl sm:text-2xl text-zinc-400 font-light"
             >
-              View selected work
-            </a>
-            <a
-              href="#contact"
-              className="border border-[var(--line)] bg-[rgba(255,251,246,0.72)] px-5 py-3 text-sm font-medium text-[var(--foreground)] transition-colors hover:border-[var(--foreground)]"
-            >
-              Reach out
-            </a>
-            <a
-              href="/Ty_Rimedio_Resume.docx"
-              download
-              className="border border-transparent px-5 py-3 text-sm font-medium text-[var(--muted)] underline-offset-4 transition-colors hover:text-[var(--foreground)] hover:underline"
-            >
-              Download resume
-            </a>
-          </div>
+              {titles[titleIndex]}
+            </motion.span>
+          </AnimatePresence>
+        </div>
+
+        {/* Brief tagline */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="mt-6 max-w-lg mx-auto text-zinc-500 leading-relaxed"
+        >
+          CS senior at Indiana University. I build ML pipelines, prediction
+          systems, and mobile apps.
+        </motion.p>
+
+        {/* CTA buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="mt-10 flex flex-wrap gap-4 justify-center"
+        >
+          <a
+            href="#projects"
+            className="group relative px-8 py-3 rounded-full bg-indigo-600 text-white font-medium text-sm overflow-hidden cursor-pointer transition-all hover:shadow-[0_0_30px_rgba(99,102,241,0.4)]"
+          >
+            <span className="relative z-10">View Projects</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </a>
+          <a
+            href="#contact"
+            className="px-8 py-3 rounded-full border border-white/10 text-zinc-300 font-medium text-sm cursor-pointer hover:border-indigo-500/50 hover:text-white transition-all"
+          >
+            Get in Touch
+          </a>
+          <a
+            href="/Ty_Rimedio_Resume.docx"
+            download
+            className="px-8 py-3 rounded-full border border-white/10 text-zinc-300 font-medium text-sm cursor-pointer hover:border-indigo-500/50 hover:text-white transition-all flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+            </svg>
+            Resume
+          </a>
         </motion.div>
+      </motion.div>
 
-        <motion.aside
-          initial={{ opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-          className="section-frame overflow-hidden"
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+        className="absolute bottom-10"
+      >
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="w-5 h-8 rounded-full border border-white/20 flex items-start justify-center p-1.5"
         >
-          <div className="rule-grid border-b border-[var(--line)] px-6 py-5">
-            <div className="mb-4 flex items-center justify-between">
-              <p className="eyebrow">Current board</p>
-              <span className="border border-[var(--line)] px-2 py-1 font-mono text-[11px] text-[var(--muted)]">
-                LIVE
-              </span>
-            </div>
-
-            <div className="space-y-3">
-              {currentBoard.map((item) => (
-                <div key={item.label} className="border border-[var(--line)] bg-[rgba(255,251,246,0.82)] p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-                    {item.label}
-                  </p>
-                  <p className="font-display mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                    {item.value}
-                  </p>
-                  <p className="mt-1 text-sm text-[var(--muted)]">{item.detail}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="px-6 py-5">
-            <p className="eyebrow mb-4">What I optimize for</p>
-            <ul className="space-y-3">
-              {focusAreas.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-6 text-[var(--foreground)]">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </motion.aside>
-      </div>
+          <motion.div className="w-1 h-1.5 rounded-full bg-indigo-400" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

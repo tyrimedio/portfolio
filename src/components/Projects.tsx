@@ -1,229 +1,250 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef, useState } from "react";
 
 interface Project {
   title: string;
   role: string;
   date: string;
   description: string;
-  detail: string;
-  metrics: string[];
+  bullets: string[];
   tech: string[];
+  color: string;
+  icon: React.ReactNode;
   link?: { url: string; label: string };
 }
 
-const featuredProject: Project = {
-  title: "NBA Prediction System",
-  role: "Lead Developer",
-  date: "Mar 2026 - Present",
-  description:
-    "A full sports analytics system that ingests NBA and betting data, builds leakage-aware features, and generates daily game and prop predictions.",
-  detail:
-    "The interesting part is not the model in isolation. It is the evaluation discipline, the automation, and the fact that the whole thing runs on hardware sitting in a room instead of in a slide deck.",
-  metrics: [
-    "1,059 games benchmarked in walk-forward backtests",
-    "Validated against Pinnacle closing lines",
-    "Automated on Raspberry Pi with scheduled daily workflows",
-  ],
-  tech: ["Python", "LightGBM", "scikit-learn", "pandas", "NumPy"],
-  link: { url: "https://nba.court-signal.com/", label: "Open live dashboard" },
-};
+const BasketballIcon = () => (
+  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M4.93 4.93c4.08 2.38 6.2 5.88 7.07 10.07M19.07 4.93c-4.08 2.38-6.2 5.88-7.07 10.07M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+  </svg>
+);
 
-const supportingProjects: Project[] = [
+const DumbbellIcon = () => (
+  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6.5 6.5h11M6.5 17.5h11M3 10.5V6a1 1 0 0 1 1-1h1.5a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4.5M21 10.5V6a1 1 0 0 0-1-1h-1.5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1H20a1 1 0 0 0 1-1v-4.5M1 12h3M20 12h3" />
+  </svg>
+);
+
+const RobotIcon = () => (
+  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="11" width="18" height="10" rx="2" />
+    <circle cx="12" cy="5" r="2" />
+    <path d="M12 7v4M9 15h0M15 15h0M7 11V8a5 5 0 0 1 10 0v3" />
+  </svg>
+);
+
+const ImageIcon = () => (
+  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <circle cx="8.5" cy="8.5" r="1.5" />
+    <path d="m21 15-5-5L5 21" />
+  </svg>
+);
+
+const projects: Project[] = [
+  {
+    title: "NBA Prediction System",
+    role: "Lead Developer",
+    date: "Mar 2026 - Present",
+    description:
+      "End-to-end sports analytics system that ingests NBA and odds data, engineers features, and generates daily game and player-prop predictions.",
+    bullets: [
+      "Walk-forward backtesting with leakage-aware feature pipelines, benchmarked on 1,059 games",
+      "Validated against Pinnacle closing lines instead of naive train/test splits",
+      "Automated daily workflows on Raspberry Pi with systemd scheduling",
+    ],
+    tech: ["Python", "scikit-learn", "LightGBM", "pandas", "NumPy"],
+    color: "from-orange-500 to-red-500",
+    icon: <BasketballIcon />,
+    link: { url: "https://nba.court-signal.com/", label: "Live Dashboard" },
+  },
   {
     title: "Momentum Fitness",
     role: "Lead Developer",
     date: "May 2025 - Present",
     description:
-      "An AI-assisted iOS fitness app focused on nutrition, training, and feedback loops that people can actually maintain.",
-    detail:
-      "Built with SwiftUI and Firebase, with tracking, charts, macro monitoring, and an AI coaching layer.",
-    metrics: ["USDA API nutrition data", "Widget support", "Progress charts"],
+      "AI-powered fitness and nutrition coaching iOS app built with Swift and SwiftUI.",
+    bullets: [
+      "Workout & nutrition tracking with USDA API integration and macro monitoring",
+      "AI chatbot for personalized fitness guidance and support",
+      "Firebase auth, interactive progress charts, and home screen widget",
+    ],
     tech: ["Swift", "SwiftUI", "Firebase", "USDA API"],
+    color: "from-green-500 to-emerald-500",
+    icon: <DumbbellIcon />,
   },
   {
     title: "Multi-Robot Pathfinding",
     role: "Developer",
     date: "Mar - May 2025",
     description:
-      "A pathfinding simulation for multiple agents with A* search, collision avoidance, and replayable movement traces.",
-    detail:
-      "The project sharpened the part of my brain that likes constraints, edge cases, and visual debugging.",
-    metrics: ["A* routing", "Dynamic replanning", "Collision hotspot replay"],
+      "Multi-robot pathfinding simulation with A* algorithm and real-time collision avoidance.",
+    bullets: [
+      "A* algorithm for optimal path generation across multiple agents",
+      "Priority-based collision avoidance with dynamic replanning",
+      "Replay system with movement visualization and collision hotspot analysis",
+    ],
     tech: ["Python", "Pygame", "A*"],
-    link: { url: "https://www.youtube.com/watch?v=K0ddjdQcQko", label: "Watch demo" },
+    color: "from-blue-500 to-cyan-500",
+    icon: <RobotIcon />,
+    link: { url: "https://www.youtube.com/watch?v=K0ddjdQcQko", label: "Watch Demo" },
   },
   {
     title: "Image Editor",
     role: "Lead Developer",
     date: "Nov - Dec 2024",
     description:
-      "A Java desktop image editor with transformations, effects, file I/O, and a GUI built around clear object-oriented structure.",
-    detail:
-      "Less flashy than the other work, but a good example of shipping a complete interface with state and undo/redo behavior.",
-    metrics: ["Transformations", "Undo / redo", "Desktop GUI"],
+      "Java-based image processing application with a full GUI for transformations and effects.",
+    bullets: [
+      "Grayscale, color manipulation, rotation, mirroring, and pixelation effects",
+      "Undo/redo system and file I/O with object-oriented design",
+    ],
     tech: ["Java", "Swing"],
-    link: { url: "https://www.youtube.com/watch?v=hie4dLH5cYw", label: "Watch demo" },
+    color: "from-purple-500 to-pink-500",
+    icon: <ImageIcon />,
+    link: { url: "https://www.youtube.com/watch?v=hie4dLH5cYw", label: "Watch Demo" },
   },
 ];
+
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay: index * 0.15 }}
+      onClick={() => setIsExpanded(!isExpanded)}
+      className="card-glow group cursor-pointer rounded-2xl bg-white/[0.02] border border-white/[0.05] p-6 sm:p-8 transition-all duration-500 hover:bg-white/[0.04] hover:border-white/[0.1] hover:translate-y-[-4px]"
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-indigo-400 group-hover:text-indigo-300 transition-colors">{project.icon}</span>
+            <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">
+              {project.title}
+            </h3>
+          </div>
+          <div className="flex items-center gap-3 text-sm text-zinc-500">
+            <span>{project.role}</span>
+            <span className="w-1 h-1 rounded-full bg-zinc-700" />
+            <span>{project.date}</span>
+          </div>
+        </div>
+        <motion.div
+          animate={{ rotate: isExpanded ? 45 : 0 }}
+          className="text-zinc-600 text-xl mt-1"
+        >
+          +
+        </motion.div>
+      </div>
+
+      {/* Description */}
+      <p className="text-zinc-400 text-sm leading-relaxed mb-4">
+        {project.description}
+      </p>
+
+      {/* Expandable bullets */}
+      <AnimatePresence initial={false}>
+        {isExpanded && (
+      <motion.div
+        initial={{ height: 0, opacity: 0 }}
+        animate={{ height: "auto", opacity: 1 }}
+        exit={{ height: 0, opacity: 0 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="overflow-hidden"
+      >
+        <ul className="space-y-2 mb-4">
+          {project.bullets.map((bullet, i) => (
+            <motion.li
+              key={i}
+              initial={{ opacity: 0, x: -10 }}
+              animate={isExpanded ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: i * 0.1 }}
+              className="flex items-start gap-2 text-sm text-zinc-400"
+            >
+              <span
+                className={`mt-1.5 w-1.5 h-1.5 rounded-full bg-gradient-to-r ${project.color} shrink-0`}
+              />
+              {bullet}
+            </motion.li>
+          ))}
+        </ul>
+      </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Tech tags + link */}
+      <div className="flex flex-wrap items-center gap-2">
+        {project.tech.map((t) => (
+          <span
+            key={t}
+            className="px-3 py-1 text-xs rounded-full bg-white/[0.04] border border-white/[0.06] text-zinc-400 group-hover:border-indigo-500/20 group-hover:text-zinc-300 transition-colors"
+          >
+            {t}
+          </span>
+        ))}
+        {project.link && (
+          <a
+            href={project.link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className={`ml-auto flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full bg-gradient-to-r ${project.color} text-white opacity-80 hover:opacity-100 transition-opacity`}
+          >
+            {project.link.label}
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+        )}
+      </div>
+
+      {/* Bottom gradient line */}
+      <div className="mt-6 h-[1px] w-full overflow-hidden rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className={`h-full w-full bg-gradient-to-r ${project.color}`} />
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="projects" className="px-4 py-8 sm:px-6 lg:px-8">
-      <div ref={ref} className="mx-auto max-w-6xl space-y-6">
+    <section id="projects" className="relative py-32 px-6">
+      <div ref={ref} className="max-w-4xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55 }}
-          className="section-frame px-6 py-6 sm:px-8"
+          transition={{ duration: 0.6 }}
+          className="mb-12"
         >
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="eyebrow">Selected work</p>
-              <h2 className="font-display mt-3 text-4xl font-semibold tracking-tight text-[var(--foreground)] sm:text-5xl">
-                Projects with receipts
-              </h2>
-            </div>
-            <p className="max-w-xl text-sm leading-6 text-[var(--muted)]">
-              I wanted this section to feel less like generic cards and more like a project ledger. The best work gets more space. Everything else earns its place with specifics.
-            </p>
-          </div>
+          <p className="text-sm tracking-[0.3em] uppercase text-indigo-400 font-mono mb-3">
+            Projects
+          </p>
+          <h2 className="text-4xl sm:text-5xl font-bold">
+            What I&apos;ve <span className="gradient-text">built</span>
+          </h2>
+          <p className="mt-4 text-zinc-500 max-w-lg">
+            Click on a project to expand details. Each one represents a
+            real-world problem I wanted to solve.
+          </p>
         </motion.div>
 
-        <motion.article
-          initial={{ opacity: 0, y: 24 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55, delay: 0.1 }}
-          className="section-frame grid overflow-hidden lg:grid-cols-[minmax(0,1.2fr)_340px]"
-        >
-          <div className="px-6 py-7 sm:px-8 sm:py-8">
-            <div className="mb-5 flex flex-wrap items-center gap-3 text-sm text-[var(--muted)]">
-              <span className="eyebrow">01 / Featured</span>
-              <span className="h-1 w-1 rounded-full bg-[var(--foreground)]/25" />
-              <span>{featuredProject.role}</span>
-              <span className="h-1 w-1 rounded-full bg-[var(--foreground)]/25" />
-              <span>{featuredProject.date}</span>
-            </div>
-
-            <h3 className="font-display text-4xl font-semibold tracking-tight text-[var(--foreground)]">
-              {featuredProject.title}
-            </h3>
-            <p className="mt-4 max-w-2xl text-lg leading-8 text-[var(--foreground)]">
-              {featuredProject.description}
-            </p>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)]">
-              {featuredProject.detail}
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-2">
-              {featuredProject.tech.map((item) => (
-                <span
-                  key={item}
-                  className="border border-[var(--line)] bg-[rgba(255,251,246,0.76)] px-3 py-2 text-xs uppercase tracking-[0.16em] text-[var(--muted)]"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-
-            {featuredProject.link && (
-              <a
-                href={featuredProject.link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-8 inline-flex border border-[var(--foreground)] px-4 py-3 text-sm font-medium text-[var(--foreground)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
-              >
-                {featuredProject.link.label}
-              </a>
-            )}
-          </div>
-
-          <div className="rule-grid border-t border-[var(--line)] bg-[rgba(255,248,240,0.9)] px-6 py-7 lg:border-l lg:border-t-0">
-            <p className="eyebrow mb-4">What matters</p>
-            <div className="space-y-3">
-              {featuredProject.metrics.map((metric) => (
-                <div key={metric} className="border border-[var(--line)] bg-[rgba(255,251,246,0.85)] p-4 text-sm leading-6 text-[var(--foreground)]">
-                  {metric}
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.article>
-
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55, delay: 0.18 }}
-          className="section-frame overflow-hidden"
-        >
-          {supportingProjects.map((project, index) => (
-            <article
-              key={project.title}
-              className={`grid gap-5 px-6 py-6 sm:px-8 lg:grid-cols-[110px_minmax(0,1fr)_220px] lg:items-start ${
-                index !== supportingProjects.length - 1 ? "border-b border-[var(--line)]" : ""
-              }`}
-            >
-              <div>
-                <p className="eyebrow">0{index + 2}</p>
-                <p className="mt-3 text-sm text-[var(--muted)]">{project.date}</p>
-              </div>
-
-              <div>
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
-                  <div>
-                    <h3 className="font-display text-3xl font-semibold tracking-tight text-[var(--foreground)]">
-                      {project.title}
-                    </h3>
-                    <p className="mt-1 text-sm text-[var(--muted)]">{project.role}</p>
-                  </div>
-                  {project.link && (
-                    <a
-                      href={project.link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-[var(--accent)] underline-offset-4 hover:underline"
-                    >
-                      {project.link.label}
-                    </a>
-                  )}
-                </div>
-
-                <p className="mt-4 text-base leading-7 text-[var(--foreground)]">
-                  {project.description}
-                </p>
-                <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{project.detail}</p>
-              </div>
-
-              <div className="space-y-3">
-                <div className="border border-[var(--line)] bg-[rgba(255,251,246,0.76)] p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-                    Highlights
-                  </p>
-                  <ul className="mt-3 space-y-2 text-sm leading-6 text-[var(--foreground)]">
-                    {project.metrics.map((metric) => (
-                      <li key={metric}>{metric}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((item) => (
-                    <span
-                      key={item}
-                      className="border border-[var(--line)] px-2 py-1 text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </article>
+        <div className="grid gap-6">
+          {projects.map((project, i) => (
+            <ProjectCard key={project.title} project={project} index={i} />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
