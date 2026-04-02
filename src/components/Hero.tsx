@@ -1,113 +1,107 @@
-"use client";
-
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
-
-const titles = [
-  "Data Scientist",
-  "ML Engineer",
-  "Analytics Engineer",
+const currentFocus = [
+  "Running an NBA prediction pipeline on a Raspberry Pi",
+  "Building leak-aware backtesting and feature workflows",
+  "Looking for 2026 data science, ML, and data engineering roles",
 ];
 
 export default function Hero() {
-  const [titleIndex, setTitleIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTitleIndex((prev) => (prev + 1) % titles.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center"
+      className="wash-hero relative px-5 pb-14 pt-28 sm:px-8 lg:px-12 lg:pb-16 lg:pt-36"
     >
-      {/* Radial glow behind name */}
-      <div className="absolute w-[600px] h-[600px] rounded-full bg-indigo-500/10 blur-[120px] pointer-events-none" />
+      <div className="editorial-container">
+        <div className="grid gap-9 lg:grid-cols-[minmax(0,1.02fr)_360px] lg:items-start lg:gap-12">
+          <div>
+            <div className="max-w-4xl">
+              <p className="kicker max-w-md">
+                Data science, machine learning, and predictive systems
+              </p>
 
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative z-10"
-      >
-        {/* Greeting line */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-sm tracking-[0.3em] uppercase text-indigo-400 font-mono mb-6"
-        >
-          Hey, I&apos;m
-        </motion.p>
+              <h1 className="display-title mt-5 max-w-4xl text-[var(--ink)]">
+                Ty Rimedio
+              </h1>
 
-        {/* Name */}
-        <h1 className="text-6xl sm:text-8xl font-bold tracking-tight mb-4">
-          <span className="gradient-text">Ty Rimedio</span>
-        </h1>
+              <p className="mt-7 max-w-3xl text-[clamp(1.4rem,2.9vw,2.15rem)] leading-[1.08] tracking-[-0.04em] text-[var(--ink)]">
+                I build machine learning pipelines, backtesting systems, and
+                analytics products that still hold up after the prototype phase.
+              </p>
 
-        {/* Rotating title */}
-        <div className="h-12 sm:h-14 flex items-center justify-center overflow-hidden">
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={titleIndex}
-              initial={{ y: 30, opacity: 0, filter: "blur(8px)" }}
-              animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-              exit={{ y: -30, opacity: 0, filter: "blur(8px)" }}
-              transition={{ duration: 0.4 }}
-              className="text-xl sm:text-2xl text-zinc-400 font-light"
-            >
-              {titles[titleIndex]}
-            </motion.span>
-          </AnimatePresence>
+              <p className="mt-6 max-w-2xl text-base leading-8 text-[var(--muted)] sm:text-lg">
+                I&apos;m a computer science senior at Indiana University focused
+                on turning messy, real-world data into models and systems people
+                can actually trust, use, and ship.
+              </p>
+
+              <div className="mt-8 grid gap-6 border-t pt-6 soft-rule md:grid-cols-[minmax(0,1fr)_220px] md:items-start">
+                <div className="grid gap-3 text-sm font-medium text-[var(--ink)] sm:flex sm:flex-wrap sm:gap-x-8 sm:gap-y-4 sm:text-base">
+                  <a href="#projects" className="cta-primary">
+                    Selected work
+                    <span aria-hidden="true">&rarr;</span>
+                  </a>
+                  <a href="#contact" className="rule-link">
+                    Reach out
+                    <span aria-hidden="true">&rarr;</span>
+                  </a>
+                  <a
+                    href="/Ty_Rimedio_Resume.docx"
+                    download
+                    className="cta-secondary"
+                  >
+                    Download resume
+                    <span aria-hidden="true">&rarr;</span>
+                  </a>
+                </div>
+
+                <div className="space-y-4 border-t pt-5 soft-rule md:border-l md:border-t-0 md:pt-0 md:pl-5">
+                  <div>
+                    <p className="kicker">Discipline</p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--ink)]">
+                      Machine learning, data science, and applied systems work.
+                    </p>
+                  </div>
+                  <div>
+                    <p className="kicker">Goal</p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--ink)]">
+                      Be memorable enough that someone reaches out or forwards my
+                      name.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside>
+            <div className="paper-panel tone-sky h-fit rounded-[1.5rem] p-6 sm:p-7 lg:mt-4">
+              <p className="kicker">Current focus</p>
+              <ul className="mt-5 space-y-4 text-sm leading-7 text-[var(--muted)] sm:text-[0.98rem]">
+                {currentFocus.map((item) => (
+                  <li
+                    key={item}
+                    className="border-b pb-4 last:border-b-0 last:pb-0 soft-rule"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <dl className="mt-7 grid grid-cols-2 gap-4 border-t pt-5 soft-rule">
+                <div>
+                  <dt className="kicker">Location</dt>
+                  <dd className="mt-2 text-sm text-[var(--ink)]">
+                    Bloomington, IN
+                  </dd>
+                </div>
+                <div>
+                  <dt className="kicker">Graduation</dt>
+                  <dd className="mt-2 text-sm text-[var(--ink)]">May 2026</dd>
+                </div>
+              </dl>
+            </div>
+          </aside>
         </div>
-
-        {/* Brief tagline */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="mt-6 max-w-lg mx-auto text-zinc-500 leading-relaxed"
-        >
-          CS senior at Indiana University. I build ML pipelines, predictive
-          models, and data-driven systems.
-        </motion.p>
-
-        {/* CTA buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="mt-10 flex flex-wrap gap-4 justify-center"
-        >
-          <a
-            href="#projects"
-            className="group relative px-8 py-3 rounded-full bg-indigo-600 text-white font-medium text-sm overflow-hidden cursor-pointer transition-all hover:shadow-[0_0_30px_rgba(99,102,241,0.4)]"
-          >
-            <span className="relative z-10">View Projects</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-          </a>
-          <a
-            href="#contact"
-            className="px-8 py-3 rounded-full border border-white/10 text-zinc-300 font-medium text-sm cursor-pointer hover:border-indigo-500/50 hover:text-white transition-all"
-          >
-            Get in Touch
-          </a>
-          <a
-            href="/Ty_Rimedio_Resume.docx"
-            download
-            className="px-8 py-3 rounded-full border border-white/10 text-zinc-300 font-medium text-sm cursor-pointer hover:border-indigo-500/50 hover:text-white transition-all flex items-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-            </svg>
-            Resume
-          </a>
-        </motion.div>
-      </motion.div>
-
+      </div>
     </section>
   );
 }

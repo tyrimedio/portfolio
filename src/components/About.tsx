@@ -1,86 +1,63 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-
 const highlights = [
-  { label: "Focus", value: "Data Science & ML" },
-  { label: "University", value: "Indiana University" },
-  { label: "Graduation", value: "May 2026" },
-  { label: "Location", value: "Bloomington, IN" },
+  { label: "Focus", value: "Data Science & ML", tone: "tone-apricot" },
+  { label: "University", value: "Indiana University", tone: "tone-sky" },
+  { label: "Graduation", value: "May 2026", tone: "tone-apricot" },
+  { label: "Location", value: "Bloomington, IN", tone: "tone-sky" },
 ];
 
 export default function About() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="about" className="relative py-32 px-6">
-      <div ref={ref} className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <p className="text-sm tracking-[0.3em] uppercase text-indigo-400 font-mono mb-3">
-            About
-          </p>
-          <h2 className="text-4xl sm:text-5xl font-bold mb-8">
-            A bit about <span className="gradient-text">me</span>
+    <section id="about" className="section-band wash-about px-5 sm:px-8 lg:px-12">
+      <div className="editorial-container">
+        <div className="max-w-4xl">
+          <p className="kicker">About</p>
+          <h2 className="section-title mt-4 text-[var(--ink)]">
+            Built around technical depth, not portfolio theater.
           </h2>
-        </motion.div>
+        </div>
 
-        <div className="grid md:grid-cols-5 gap-12">
-          {/* Bio text */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="md:col-span-3 space-y-5 text-zinc-400 leading-relaxed"
-          >
-            <p>
-              I&apos;m a Computer Science senior at Indiana University focused
-              on data science and machine learning. I like turning messy,
-              real-world data into models, pipelines, and decisions that hold
-              up outside the notebook.
+        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)] lg:gap-14">
+          <div className="space-y-8">
+            <p className="max-w-3xl text-[1.16rem] leading-8 text-[var(--ink)] sm:text-[1.28rem] sm:leading-9">
+              The work I care about most sits in the uncomfortable middle
+              ground between modeling, engineering, and decision-making.
             </p>
-            <p>
-              Right now I&apos;m running an NBA prediction pipeline on a
-              Raspberry Pi, iterating on feature engineering and backtesting,
-              and building systems that make model output easier to trust and
-              use. I care a lot about clean data pipelines, reproducible
-              results, and measurable performance.
-            </p>
-            <p>
-              Outside of coding I&apos;m usually watching basketball, in the
-              gym, or messing around with a new side project. I&apos;m looking
-              for roles in data science, machine learning, or data engineering
-              after graduation.
-            </p>
-          </motion.div>
 
-          {/* Quick facts */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="md:col-span-2 space-y-4"
-          >
-            {highlights.map((item, i) => (
-              <motion.div
-                key={item.label}
-                initial={{ opacity: 0, x: 20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.5 + i * 0.1 }}
-                className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]"
-              >
-                <p className="text-xs tracking-wider uppercase text-zinc-600 mb-1">
-                  {item.label}
-                </p>
-                <p className="text-white font-medium">{item.value}</p>
-              </motion.div>
-            ))}
-          </motion.div>
+            <div className="grid gap-7 border-t pt-7 soft-rule md:grid-cols-2">
+              <p className="text-base leading-8 text-[var(--muted)] sm:text-lg">
+                I&apos;m a computer science senior at Indiana University focused
+                on data science and machine learning, especially when the work
+                has to survive real constraints and real users.
+              </p>
+              <p className="text-base leading-8 text-[var(--muted)] sm:text-lg">
+                Right now I&apos;m running an NBA prediction pipeline on a
+                Raspberry Pi, iterating on feature engineering, backtesting,
+                and evaluation so the output is useful outside a notebook.
+              </p>
+            </div>
+          </div>
+
+          <div className="editorial-pin grid gap-7">
+            <dl className="grid gap-4 sm:grid-cols-2">
+              {highlights.map((item) => (
+                <div
+                  key={item.label}
+                  className={`rounded-[1.15rem] border p-5 ${item.tone}`}
+                >
+                  <dt className="kicker">{item.label}</dt>
+                  <dd className="mt-3 text-base leading-7 text-[var(--ink)]">
+                    {item.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            <p className="max-w-xl border-l pl-5 text-base leading-8 text-[var(--muted)] soft-rule sm:text-lg">
+              I&apos;m most interested in roles where clean pipelines,
+              reproducible experiments, and measurable model performance matter
+              as much as the model itself.
+            </p>
+          </div>
         </div>
       </div>
     </section>

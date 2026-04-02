@@ -1,8 +1,3 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-
 const skillCategories = [
   {
     label: "Languages",
@@ -37,60 +32,36 @@ const skillCategories = [
 ];
 
 export default function Skills() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="skills" className="relative py-32 px-6">
-      <div ref={ref} className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
-          <p className="text-sm tracking-[0.3em] uppercase text-indigo-400 font-mono mb-3">
-            Skills
-          </p>
-          <h2 className="text-4xl sm:text-5xl font-bold">
-            Data Science <span className="gradient-text">toolkit</span>
+    <section
+      id="skills"
+      className="section-band wash-skills px-5 sm:px-8 lg:px-12"
+    >
+      <div className="editorial-container grid gap-10 lg:grid-cols-[minmax(0,0.88fr)_minmax(280px,1.12fr)] lg:gap-14">
+        <div className="editorial-pin">
+          <p className="kicker">Capabilities</p>
+          <h2
+            className="section-title mt-4 max-w-[13ch] !leading-[1.02] !tracking-[-0.018em] text-[var(--ink)] sm:max-w-[14ch] lg:max-w-[12ch]"
+          >
+            A toolkit built for applied machine learning work.
           </h2>
-          <p className="mt-4 text-zinc-500 max-w-lg">
-            Most of my work centers on Python-based modeling, feature
-            engineering, automation, and evaluation workflows.
+          <p className="mt-6 max-w-xl text-base leading-8 text-[var(--muted)] sm:text-lg">
+            My strongest work sits at the intersection of modeling, validation,
+            and the infrastructure required to keep technical ideas useful.
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid sm:grid-cols-2 gap-8">
-          {skillCategories.map((cat, catIndex) => (
-            <motion.div
+        <div className="space-y-7">
+          {skillCategories.map((cat) => (
+            <div
               key={cat.label}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: catIndex * 0.15 }}
+              className="grid gap-4 border-t pt-6 soft-rule md:grid-cols-[clamp(7rem,18vw,8.25rem)_minmax(0,1fr)]"
             >
-              <h3 className="text-sm font-mono tracking-wider text-zinc-500 uppercase mb-4">
-                {cat.label}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {cat.skills.map((skill, i) => (
-                  <motion.span
-                    key={skill}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ delay: catIndex * 0.15 + i * 0.05 }}
-                    whileHover={{
-                      scale: 1.08,
-                      backgroundColor: "rgba(99, 102, 241, 0.15)",
-                      borderColor: "rgba(99, 102, 241, 0.4)",
-                    }}
-                    className="px-4 py-2 text-sm rounded-full bg-white/[0.03] border border-white/[0.06] text-zinc-300 cursor-default transition-colors"
-                  >
-                    {skill}
-                  </motion.span>
-                ))}
-              </div>
-            </motion.div>
+              <p className="kicker md:pt-1">{cat.label}</p>
+              <p className="text-base leading-8 text-[var(--ink)] sm:text-lg">
+                {cat.skills.join(" / ")}
+              </p>
+            </div>
           ))}
         </div>
       </div>

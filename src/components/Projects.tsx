@@ -1,8 +1,3 @@
-"use client";
-
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { useRef, useState } from "react";
-
 interface Project {
   title: string;
   role: string;
@@ -10,39 +5,8 @@ interface Project {
   description: string;
   bullets: string[];
   tech: string[];
-  color: string;
-  icon: React.ReactNode;
   link?: { url: string; label: string };
 }
-
-const BasketballIcon = () => (
-  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10" />
-    <path d="M4.93 4.93c4.08 2.38 6.2 5.88 7.07 10.07M19.07 4.93c-4.08 2.38-6.2 5.88-7.07 10.07M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-  </svg>
-);
-
-const DumbbellIcon = () => (
-  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M6.5 6.5h11M6.5 17.5h11M3 10.5V6a1 1 0 0 1 1-1h1.5a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4.5M21 10.5V6a1 1 0 0 0-1-1h-1.5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1H20a1 1 0 0 0 1-1v-4.5M1 12h3M20 12h3" />
-  </svg>
-);
-
-const RobotIcon = () => (
-  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="11" width="18" height="10" rx="2" />
-    <circle cx="12" cy="5" r="2" />
-    <path d="M12 7v4M9 15h0M15 15h0M7 11V8a5 5 0 0 1 10 0v3" />
-  </svg>
-);
-
-const ImageIcon = () => (
-  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="18" height="18" rx="2" />
-    <circle cx="8.5" cy="8.5" r="1.5" />
-    <path d="m21 15-5-5L5 21" />
-  </svg>
-);
 
 const projects: Project[] = [
   {
@@ -50,15 +14,13 @@ const projects: Project[] = [
     role: "Project Lead",
     date: "Mar 2026 - Present",
     description:
-      "End-to-end sports analytics system that ingests NBA and odds data, engineers features, and generates daily game and player-prop predictions.",
+      "End-to-end sports analytics system that ingests NBA and odds data, engineers leak-aware features, and generates daily game predictions — evaluated on held-out data, not cherry-picked results.",
     bullets: [
-      "Walk-forward backtesting with leakage-aware feature pipelines, benchmarked on 1,059 games",
-      "Validated against Pinnacle closing lines instead of naive train/test splits",
-      "Automated daily workflows on Raspberry Pi with systemd scheduling",
+      "67.1% logistic accuracy across 1,075 held-out games with documented log loss and Brier score",
+      "Benchmarked against Pinnacle closing lines — approaches market-level accuracy, no claimed edge",
+      "Runs autonomously on a Raspberry Pi with four daily slate refreshes and lock-based scheduling",
     ],
     tech: ["Python", "scikit-learn", "LightGBM", "pandas", "NumPy"],
-    color: "from-orange-500 to-red-500",
-    icon: <BasketballIcon />,
     link: { url: "https://nba.court-signal.com/", label: "Live Dashboard" },
   },
   {
@@ -73,8 +35,6 @@ const projects: Project[] = [
       "Interactive progress charts, Firebase auth, and a home screen widget for daily feedback",
     ],
     tech: ["Swift", "SwiftUI", "Firebase", "USDA API"],
-    color: "from-green-500 to-emerald-500",
-    icon: <DumbbellIcon />,
   },
   {
     title: "Multi-Robot Pathfinding",
@@ -88,8 +48,6 @@ const projects: Project[] = [
       "Replay system with movement visualization and congestion hotspot analysis",
     ],
     tech: ["Python", "Pygame", "A*"],
-    color: "from-blue-500 to-cyan-500",
-    icon: <RobotIcon />,
     link: { url: "https://www.youtube.com/watch?v=K0ddjdQcQko", label: "Watch Demo" },
   },
   {
@@ -103,148 +61,348 @@ const projects: Project[] = [
       "Undo/redo system and file I/O with object-oriented design",
     ],
     tech: ["Java", "Swing"],
-    color: "from-purple-500 to-pink-500",
-    icon: <ImageIcon />,
     link: { url: "https://www.youtube.com/watch?v=hie4dLH5cYw", label: "Watch Demo" },
   },
 ];
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-  const [isExpanded, setIsExpanded] = useState(false);
+/* Real calibration buckets from reports/backtest_logistic.csv */
+const calibrationBuckets = [
+  { predicted: 35, actual: 33.79, games: 364 },
+  { predicted: 52.5, actual: 45.67, games: 127 },
+  { predicted: 60, actual: 61.84, games: 283 },
+  { predicted: 70, actual: 72.5, games: 160 },
+  { predicted: 87.5, actual: 80.85, games: 141 },
+];
 
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.15 }}
-      onClick={() => setIsExpanded(!isExpanded)}
-      className="card-glow group cursor-pointer rounded-2xl bg-white/[0.02] border border-white/[0.05] p-6 sm:p-8 transition-all duration-500 hover:bg-white/[0.04] hover:border-white/[0.1] hover:translate-y-[-4px]"
-    >
-      {/* Header */}
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-indigo-400 group-hover:text-indigo-300 transition-colors">{project.icon}</span>
-            <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">
-              {project.title}
-            </h3>
-          </div>
-          <div className="flex items-center gap-3 text-sm text-zinc-500">
-            <span>{project.role}</span>
-            <span className="w-1 h-1 rounded-full bg-zinc-700" />
-            <span>{project.date}</span>
-          </div>
-        </div>
-        <motion.div
-          animate={{ rotate: isExpanded ? 45 : 0 }}
-          className="text-zinc-600 text-xl mt-1"
-        >
-          +
-        </motion.div>
-      </div>
+/* Monthly held-out accuracy, Oct 2025 – Mar 2026 */
+const monthlyAccuracy = [
+  { month: "Oct", value: 68.8 },
+  { month: "Nov", value: 71.2 },
+  { month: "Dec", value: 56.3 },
+  { month: "Jan", value: 60.5 },
+  { month: "Feb", value: 60.2 },
+  { month: "Mar", value: 77.6 },
+];
 
-      {/* Description */}
-      <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-        {project.description}
-      </p>
+/* Chart helpers — runs at build time (server component) */
+const CX = { l: 42, t: 12, w: 168, h: 168 };
+const px = (pct: number) => CX.l + (pct / 100) * CX.w;
+const py = (pct: number) => CX.t + CX.h - (pct / 100) * CX.h;
+const dotR = (games: number) => 3.6 + Math.sqrt(games / 364) * 4.4;
 
-      {/* Expandable bullets */}
-      <AnimatePresence initial={false}>
-        {isExpanded && (
-      <motion.div
-        initial={{ height: 0, opacity: 0 }}
-        animate={{ height: "auto", opacity: 1 }}
-        exit={{ height: 0, opacity: 0 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="overflow-hidden"
-      >
-        <ul className="space-y-2 mb-4">
-          {project.bullets.map((bullet, i) => (
-            <motion.li
-              key={i}
-              initial={{ opacity: 0, x: -10 }}
-              animate={isExpanded ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: i * 0.1 }}
-              className="flex items-start gap-2 text-sm text-zinc-400"
-            >
-              <span
-                className={`mt-1.5 w-1.5 h-1.5 rounded-full bg-gradient-to-r ${project.color} shrink-0`}
-              />
-              {bullet}
-            </motion.li>
-          ))}
-        </ul>
-      </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Tech tags + link */}
-      <div className="flex flex-wrap items-center gap-2">
-        {project.tech.map((t) => (
-          <span
-            key={t}
-            className="px-3 py-1 text-xs rounded-full bg-white/[0.04] border border-white/[0.06] text-zinc-400 group-hover:border-indigo-500/20 group-hover:text-zinc-300 transition-colors"
-          >
-            {t}
-          </span>
-        ))}
-        {project.link && (
-          <a
-            href={project.link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className={`ml-auto flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full bg-gradient-to-r ${project.color} text-white opacity-80 hover:opacity-100 transition-opacity`}
-          >
-            {project.link.label}
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-          </a>
-        )}
-      </div>
-
-      {/* Bottom gradient line */}
-      <div className="mt-6 h-[1px] w-full overflow-hidden rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-        <div className={`h-full w-full bg-gradient-to-r ${project.color}`} />
-      </div>
-    </motion.div>
-  );
-}
+const sparkMin = 56.3;
+const sparkMax = 77.6;
+const sparkRange = sparkMax - sparkMin;
+const sparkH = 28;
+const sparkPad = 4;
+const sparkPoints = monthlyAccuracy.map((m, i) => ({
+  x: (i / (monthlyAccuracy.length - 1)) * 180,
+  y: sparkPad + sparkH - ((m.value - sparkMin) / sparkRange) * sparkH,
+}));
+const sparkLine = sparkPoints.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x},${p.y}`).join(" ");
+const sparkArea = `${sparkLine} L ${sparkPoints.at(-1)!.x},${sparkH + sparkPad + 1} L 0,${sparkH + sparkPad + 1} Z`;
 
 export default function Projects() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [featuredProject, ...supportingProjects] = projects;
 
   return (
-    <section id="projects" className="relative py-32 px-6">
-      <div ref={ref} className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
-          <p className="text-sm tracking-[0.3em] uppercase text-indigo-400 font-mono mb-3">
-            Projects
-          </p>
-          <h2 className="text-4xl sm:text-5xl font-bold">
-            Selected <span className="gradient-text">work</span>
-          </h2>
-          <p className="mt-4 text-zinc-500 max-w-lg">
-            Click on a project to expand details. Together they show how I
-            approach prediction, optimization, automation, and data-informed
-            product decisions across different domains.
-          </p>
-        </motion.div>
+    <section
+      id="projects"
+      className="section-band wash-projects px-5 sm:px-8 lg:px-12"
+    >
+      <div className="editorial-container">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(280px,0.62fr)] lg:items-end">
+          <div>
+            <p className="kicker">Projects</p>
+            <h2 className="section-title mt-4 max-w-4xl text-[var(--ink)]">
+              Work that holds up outside the prototype.
+            </h2>
+          </div>
 
-        <div className="grid gap-6">
-          {projects.map((project, i) => (
-            <ProjectCard key={project.title} project={project} index={i} />
-          ))}
+          <p className="editorial-pin max-w-lg text-base leading-8 text-[var(--muted)] sm:text-lg lg:justify-self-end">
+            The throughline is simple: build from real data, validate under
+            real constraints, and make the result usable.
+          </p>
+        </div>
+
+        <article className="mt-12 border-t pt-8 soft-rule">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(240px,0.7fr)] lg:gap-12">
+            <div className="max-w-4xl">
+              <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
+                <p className="kicker">Featured project</p>
+                <p className="text-sm text-[var(--muted)]">
+                  {featuredProject.role} / {featuredProject.date}
+                </p>
+              </div>
+              <h3
+                className="mt-3 max-w-3xl text-4xl leading-[0.95] tracking-[-0.045em] text-[var(--ink)] sm:text-5xl"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                {featuredProject.title}
+              </h3>
+
+              <p className="mt-6 max-w-3xl text-[1.08rem] leading-8 text-[var(--ink)] sm:text-[1.18rem] sm:leading-9">
+                {featuredProject.description}
+              </p>
+
+              <ul className="mt-6 max-w-3xl space-y-3 text-sm leading-7 text-[var(--ink)] sm:text-[0.98rem]">
+                {featuredProject.bullets.map((bullet) => (
+                  <li key={bullet} className="flex gap-3">
+                    <span className="mt-[0.7rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-4 border-t pt-6 soft-rule">
+                <p className="text-xs tracking-[0.16em] uppercase text-[var(--muted)]">
+                  {featuredProject.tech.join(" / ")}
+                </p>
+                {featuredProject.link && (
+                  <a
+                    href={featuredProject.link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rule-link text-sm font-medium text-[var(--ink)]"
+                  >
+                    {featuredProject.link.label}
+                    <span aria-hidden="true">&rarr;</span>
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <div className="editorial-pin border-t pt-6 soft-rule lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+              <div className="paper-panel rounded-[1.5rem] p-6 sm:p-7">
+                <div className="flex flex-wrap items-baseline justify-between gap-3">
+                  <p className="kicker">Calibration</p>
+                  <p className="text-[0.68rem] text-[var(--muted)]">
+                    1,075 held-out games
+                  </p>
+                </div>
+
+                {/* ── Calibration chart ── */}
+                <div className="mt-4">
+                  <svg
+                    viewBox="0 0 222 224"
+                    className="w-full"
+                    role="img"
+                    aria-label="Calibration chart showing predicted probability vs actual win rate across 5 confidence buckets. Points near the diagonal indicate good calibration."
+                  >
+                    {/* Grid lines */}
+                    {[25, 50, 75].map((pct) => (
+                      <g key={pct} opacity={0.35}>
+                        <line
+                          x1={CX.l} y1={py(pct)} x2={CX.l + CX.w} y2={py(pct)}
+                          stroke="var(--rule-strong)" strokeWidth={0.5}
+                        />
+                        <line
+                          x1={px(pct)} y1={CX.t} x2={px(pct)} y2={CX.t + CX.h}
+                          stroke="var(--rule-strong)" strokeWidth={0.5}
+                        />
+                      </g>
+                    ))}
+
+                    {/* Y-axis labels */}
+                    {[25, 50, 75].map((pct) => (
+                      <text
+                        key={`y-${pct}`} x={CX.l - 5} y={py(pct) + 1}
+                        textAnchor="end" dominantBaseline="middle"
+                        fill="var(--muted)" fontSize={7.5} opacity={0.7}
+                      >
+                        {pct}%
+                      </text>
+                    ))}
+
+                    {/* X-axis labels */}
+                    {[25, 50, 75].map((pct) => (
+                      <text
+                        key={`x-${pct}`} x={px(pct)} y={CX.t + CX.h + 14}
+                        textAnchor="middle"
+                        fill="var(--muted)" fontSize={7.5} opacity={0.7}
+                      >
+                        {pct}%
+                      </text>
+                    ))}
+
+                    {/* Axis titles */}
+                    <text
+                      x={CX.l + CX.w / 2} y={CX.t + CX.h + 26}
+                      textAnchor="middle"
+                      fill="var(--muted)" fontSize={7}
+                      letterSpacing="0.12em"
+                    >
+                      PREDICTED
+                    </text>
+                    <text
+                      x={0} y={0}
+                      textAnchor="middle"
+                      fill="var(--muted)" fontSize={7}
+                      letterSpacing="0.12em"
+                      transform={`translate(8, ${CX.t + CX.h / 2}) rotate(-90)`}
+                    >
+                      ACTUAL
+                    </text>
+
+                    {/* Perfect calibration diagonal */}
+                    <line
+                      x1={px(0)} y1={py(0)} x2={px(100)} y2={py(100)}
+                      stroke="var(--rule-strong)" strokeWidth={1}
+                      strokeDasharray="4 3" opacity={0.5}
+                    />
+                    <text
+                      x={px(92)} y={py(95)}
+                      fill="var(--muted)" fontSize={6.5} opacity={0.5}
+                      textAnchor="end"
+                    >
+                      perfect
+                    </text>
+
+                    {/* Data points — radius encodes sample size */}
+                    {calibrationBuckets.map((b) => (
+                      <circle
+                        key={b.predicted}
+                        cx={px(b.predicted)}
+                        cy={py(b.actual)}
+                        r={dotR(b.games)}
+                        fill="var(--ink)"
+                        opacity={0.72}
+                      />
+                    ))}
+                  </svg>
+                </div>
+
+                {/* ── Key metrics row ── */}
+                <div className="mt-3 grid grid-cols-3 gap-3 border-t pt-4 soft-rule">
+                  {[
+                    { label: "Accuracy", value: "67.1%" },
+                    { label: "Log loss", value: "0.6065" },
+                    { label: "Brier", value: "0.2101" },
+                  ].map((m) => (
+                    <div key={m.label} className="text-center">
+                      <p
+                        className="text-[1.25rem] leading-none tracking-[-0.03em] text-[var(--ink)]"
+                        style={{ fontFamily: "var(--font-display)" }}
+                      >
+                        {m.value}
+                      </p>
+                      <p className="mt-1.5 text-[0.62rem] tracking-[0.16em] uppercase text-[var(--muted)]">
+                        {m.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* ── Season sparkline ── */}
+                <div className="mt-4 border-t pt-4 soft-rule">
+                  <p className="text-[0.62rem] tracking-[0.16em] uppercase text-[var(--muted)]">
+                    Monthly accuracy, Oct – Mar
+                  </p>
+                  <div className="mt-3 px-1">
+                    <svg
+                      viewBox={`-4 0 188 ${sparkH + sparkPad * 2 + 1}`}
+                      className="w-full"
+                      role="img"
+                      aria-label="Monthly accuracy sparkline showing performance from October 2025 to March 2026"
+                    >
+                      <path
+                        d={sparkArea}
+                        fill="var(--ink)" opacity={0.06}
+                      />
+                      <path
+                        d={sparkLine}
+                        fill="none" stroke="var(--ink)" strokeWidth={1.5}
+                        strokeLinecap="round" strokeLinejoin="round"
+                        opacity={0.55}
+                      />
+                      {sparkPoints.map((p, i) => (
+                        <circle
+                          key={monthlyAccuracy[i].month}
+                          cx={p.x} cy={p.y} r={2.2}
+                          fill="var(--ink)" opacity={0.65}
+                        />
+                      ))}
+                    </svg>
+                  </div>
+                  <div className="mt-1 flex justify-between px-1">
+                    {monthlyAccuracy.map((m) => (
+                      <span
+                        key={m.month}
+                        className="text-[0.58rem] text-[var(--muted)]"
+                      >
+                        {m.month}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <div className="mt-14 border-t pt-8 soft-rule">
+          <div className="flex flex-wrap items-baseline justify-between gap-4">
+            <h3
+              className="text-[2.1rem] leading-[0.96] tracking-[-0.04em] text-[var(--ink)] sm:text-[2.55rem]"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              Additional work
+            </h3>
+            <p className="max-w-lg text-sm leading-7 text-[var(--muted)] sm:text-base">
+              Product work, simulation work, and lower-level implementation
+              detail.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-8 lg:grid-cols-2 lg:gap-x-12 lg:gap-y-10">
+            {supportingProjects.map((project) => (
+              <article key={project.title} className="border-t pt-6 soft-rule">
+                <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
+                  <div>
+                    <p className="kicker">{project.role}</p>
+                    <h4
+                      className="mt-3 text-3xl leading-[0.98] tracking-[-0.035em] text-[var(--ink)] sm:text-[2.1rem]"
+                      style={{ fontFamily: "var(--font-display)" }}
+                    >
+                      {project.title}
+                    </h4>
+                  </div>
+                  <p className="text-sm text-[var(--muted)]">{project.date}</p>
+                </div>
+
+                <p className="mt-5 max-w-2xl text-base leading-8 text-[var(--muted)]">
+                  {project.description}
+                </p>
+
+                <ul className="mt-5 space-y-3 text-sm leading-7 text-[var(--ink)]">
+                  {project.bullets.map((bullet) => (
+                    <li key={bullet} className="flex gap-3">
+                      <span className="mt-[0.7rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="mt-5 text-xs tracking-[0.16em] uppercase text-[var(--muted)]">
+                  {project.tech.join(" / ")}
+                </p>
+
+                {project.link && (
+                  <div className="mt-5">
+                    <a
+                      href={project.link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rule-link text-sm font-medium text-[var(--ink)]"
+                    >
+                      {project.link.label}
+                      <span aria-hidden="true">&rarr;</span>
+                    </a>
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
