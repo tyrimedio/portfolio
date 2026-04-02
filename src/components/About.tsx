@@ -39,21 +39,23 @@ export default function About() {
             className="md:col-span-3 space-y-5 text-zinc-400 leading-relaxed"
           >
             <p>
-              I&apos;m a Computer Science senior at Indiana University, mostly
-              focused on data science and machine learning. I like building
-              things that work with real data and actually do something useful.
+              I&apos;m a Computer Science senior at Indiana University focused
+              on data science and machine learning. I like turning messy,
+              real-world data into models, pipelines, and decisions that hold
+              up outside the notebook.
             </p>
             <p>
-              Right now I&apos;m running an NBA prediction pipeline off a
-              Raspberry Pi and building a fitness app in Swift. I care a lot
-              about clean data pipelines, reproducible results, and getting
-              things into people&apos;s hands.
+              Right now I&apos;m running an NBA prediction pipeline on a
+              Raspberry Pi, iterating on feature engineering and backtesting,
+              and building systems that make model output easier to trust and
+              use. I care a lot about clean data pipelines, reproducible
+              results, and measurable performance.
             </p>
             <p>
               Outside of coding I&apos;m usually watching basketball, in the
               gym, or messing around with a new side project. I&apos;m looking
-              for roles in ML, data engineering, or software development after
-              graduation.
+              for roles in data science, machine learning, or data engineering
+              after graduation.
             </p>
           </motion.div>
 

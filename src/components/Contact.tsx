@@ -69,8 +69,9 @@ export default function Contact() {
             Let&apos;s <span className="gradient-text">connect</span>
           </h2>
           <p className="text-zinc-500 max-w-md mx-auto mb-12">
-            I&apos;m open to new opportunities and always down to chat. Feel
-            free to reach out.
+            I&apos;m looking for data science, machine learning, and data
+            engineering opportunities. Reach out if you&apos;re building data
+            products, predictive systems, or analytics workflows.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

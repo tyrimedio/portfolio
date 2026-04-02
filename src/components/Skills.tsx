@@ -6,7 +6,7 @@ import { useRef } from "react";
 const skillCategories = [
   {
     label: "Languages",
-    skills: ["Python", "SQL", "Java", "Swift"],
+    skills: ["Python", "SQL", "Java"],
   },
   {
     label: "ML / Data",
@@ -15,20 +15,23 @@ const skillCategories = [
       "NumPy",
       "scikit-learn",
       "LightGBM",
-      "TensorFlow",
       "SHAP",
+      "Feature Engineering",
+      "Backtesting",
     ],
   },
   {
     label: "Tools & Infra",
-    skills: ["Git", "Firebase", "Workflow Automation", "ML Pipelines"],
+    skills: ["Git", "systemd", "Workflow Automation", "Raspberry Pi", "ML Pipelines"],
   },
   {
     label: "Concepts",
     skills: [
       "Machine Learning",
+      "Predictive Modeling",
       "Data Analysis",
-      "Data Structures & Algorithms",
+      "Model Validation",
+      "Data Visualization",
     ],
   },
 ];
@@ -50,8 +53,12 @@ export default function Skills() {
             Skills
           </p>
           <h2 className="text-4xl sm:text-5xl font-bold">
-            My <span className="gradient-text">toolkit</span>
+            Data Science <span className="gradient-text">toolkit</span>
           </h2>
+          <p className="mt-4 text-zinc-500 max-w-lg">
+            Most of my work centers on Python-based modeling, feature
+            engineering, automation, and evaluation workflows.
+          </p>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 gap-8">

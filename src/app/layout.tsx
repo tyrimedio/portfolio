@@ -17,26 +17,28 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Ty Rimedio | Data Scientist & ML Engineer",
   description:
-    "Ty Rimedio's portfolio. CS senior at Indiana University focused on data science and machine learning.",
+    "Ty Rimedio's portfolio. CS senior at Indiana University focused on data science, machine learning, and predictive systems.",
   keywords: [
     "Ty Rimedio",
-    "developer",
     "data scientist",
+    "machine learning engineer",
     "machine learning",
+    "data engineering",
+    "sports analytics",
     "portfolio",
     "Indiana University",
   ],
   openGraph: {
     title: "Ty Rimedio | Data Scientist & ML Engineer",
     description:
-      "CS senior at Indiana University. I build ML pipelines, prediction systems, and mobile apps.",
+      "CS senior at Indiana University. I build ML pipelines, predictive models, and data-driven systems.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Ty Rimedio | Data Scientist & ML Engineer",
     description:
-      "CS senior at Indiana University. I build ML pipelines, prediction systems, and mobile apps.",
+      "CS senior at Indiana University. I build ML pipelines, predictive models, and data-driven systems.",
   },
 };
 

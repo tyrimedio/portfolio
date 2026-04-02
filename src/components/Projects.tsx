@@ -47,7 +47,7 @@ const ImageIcon = () => (
 const projects: Project[] = [
   {
     title: "NBA Prediction System",
-    role: "Lead Developer",
+    role: "Project Lead",
     date: "Mar 2026 - Present",
     description:
       "End-to-end sports analytics system that ingests NBA and odds data, engineers features, and generates daily game and player-prop predictions.",
@@ -63,14 +63,14 @@ const projects: Project[] = [
   },
   {
     title: "Momentum Fitness",
-    role: "Lead Developer",
+    role: "Project Lead",
     date: "May 2025 - Present",
     description:
-      "AI-powered fitness and nutrition coaching iOS app built with Swift and SwiftUI.",
+      "Personalized fitness and nutrition tracking system built around recommendation logic, user data, and progress analytics on iOS.",
     bullets: [
-      "Workout & nutrition tracking with USDA API integration and macro monitoring",
-      "AI chatbot for personalized fitness guidance and support",
-      "Firebase auth, interactive progress charts, and home screen widget",
+      "Structured workout and nutrition logging with USDA API integration and macro trend tracking",
+      "Personalized coaching workflow driven by user goals, habits, and logged activity",
+      "Interactive progress charts, Firebase auth, and a home screen widget for daily feedback",
     ],
     tech: ["Swift", "SwiftUI", "Firebase", "USDA API"],
     color: "from-green-500 to-emerald-500",
@@ -78,14 +78,14 @@ const projects: Project[] = [
   },
   {
     title: "Multi-Robot Pathfinding",
-    role: "Developer",
+    role: "Contributor",
     date: "Mar - May 2025",
     description:
-      "Multi-robot pathfinding simulation with A* algorithm and real-time collision avoidance.",
+      "Algorithmic simulation project focused on multi-agent path optimization, real-time collision avoidance, and replayable systems analysis.",
     bullets: [
       "A* algorithm for optimal path generation across multiple agents",
       "Priority-based collision avoidance with dynamic replanning",
-      "Replay system with movement visualization and collision hotspot analysis",
+      "Replay system with movement visualization and congestion hotspot analysis",
     ],
     tech: ["Python", "Pygame", "A*"],
     color: "from-blue-500 to-cyan-500",
@@ -94,10 +94,10 @@ const projects: Project[] = [
   },
   {
     title: "Image Editor",
-    role: "Lead Developer",
+    role: "Project Lead",
     date: "Nov - Dec 2024",
     description:
-      "Java-based image processing application with a full GUI for transformations and effects.",
+      "Image processing project centered on pixel-level transformations, composable effects, and interactive experimentation.",
     bullets: [
       "Grayscale, color manipulation, rotation, mirroring, and pixelation effects",
       "Undo/redo system and file I/O with object-oriented design",
@@ -232,11 +232,12 @@ export default function Projects() {
             Projects
           </p>
           <h2 className="text-4xl sm:text-5xl font-bold">
-            What I&apos;ve <span className="gradient-text">built</span>
+            Selected <span className="gradient-text">work</span>
           </h2>
           <p className="mt-4 text-zinc-500 max-w-lg">
-            Click on a project to expand details. Each one represents a
-            real-world problem I wanted to solve.
+            Click on a project to expand details. Together they show how I
+            approach prediction, optimization, automation, and data-informed
+            product decisions across different domains.
           </p>
         </motion.div>
 

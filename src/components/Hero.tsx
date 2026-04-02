@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 const titles = [
   "Data Scientist",
   "ML Engineer",
-  "Software Developer",
+  "Analytics Engineer",
 ];
 
 export default function Hero() {
@@ -71,8 +71,8 @@ export default function Hero() {
           transition={{ delay: 0.6 }}
           className="mt-6 max-w-lg mx-auto text-zinc-500 leading-relaxed"
         >
-          CS senior at Indiana University. I build ML pipelines, prediction
-          systems, and mobile apps.
+          CS senior at Indiana University. I build ML pipelines, predictive
+          models, and data-driven systems.
         </motion.p>
 
         {/* CTA buttons */}
@@ -108,21 +108,6 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        className="absolute bottom-10"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="w-5 h-8 rounded-full border border-white/20 flex items-start justify-center p-1.5"
-        >
-          <motion.div className="w-1 h-1.5 rounded-full bg-indigo-400" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }
