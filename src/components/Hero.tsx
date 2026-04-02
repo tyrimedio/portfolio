@@ -7,7 +7,6 @@ const titles = [
   "Data Scientist",
   "ML Engineer",
   "Software Developer",
-  "iOS Developer",
 ];
 
 export default function Hero() {
